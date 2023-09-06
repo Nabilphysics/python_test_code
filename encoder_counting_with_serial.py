@@ -22,9 +22,11 @@ while True:
         serial_decode = serial_raw.decode('utf-8').rstrip('\n')
         #print(serial_decode) position 0 = right encoder raw value, 1 = left Encoder Raw Value
         serial_split = serial_decode.split(',')
-
-        current_encoder = int(serial_split[2])
-        #left_encoder_rawValue_current = float(serial_split[1])
+        try:
+            current_encoder = int(serial_split[2])
+            #left_encoder_rawValue_current = float(serial_split[1])
+        except:
+            pass
 
         # If Rotation is in Positive Direction (Clockwise)  
         if((previous_encoder > encoder_highest * 0.7 and previous_encoder <= encoder_highest) and (current_encoder >= encoder_lowest and current_encoder < encoder_highest * 0.3)):
