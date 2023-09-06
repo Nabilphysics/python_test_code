@@ -1,6 +1,6 @@
 import time
 import serial
-ser = serial.Serial('/dev/ttyACM0', 2000000,timeout= 1)
+ser = serial.Serial('/dev/ttyACM0', 115200,timeout= 1)
 time.sleep(0.1)
 
 encoder_highest = 1023.0
@@ -19,10 +19,11 @@ while True:
     if ser.in_waiting:
         serial_raw = ser.readline() 
         #print(serial_raw)
-        serial_decode = serial_raw.decode('utf-8').rstrip('\n')
-        #print(serial_decode) position 0 = right encoder raw value, 1 = left Encoder Raw Value
-        serial_split = serial_decode.split(',')
         try:
+            serial_decode = serial_raw.decode('utf-8').rstrip('\n')
+            #print(serial_decode) position 0 = right encoder raw value, 1 = left Encoder Raw Value
+            serial_split = serial_decode.split(',')
+        
             current_encoder = int(serial_split[2])
             #left_encoder_rawValue_current = float(serial_split[1])
         except:
@@ -32,11 +33,12 @@ while True:
         if((previous_encoder > encoder_highest * 0.7 and previous_encoder <= encoder_highest) and (current_encoder >= encoder_lowest and current_encoder < encoder_highest * 0.3)):
             previous_encoder = previous_encoder - encoder_highest
         #Rotation Check if Negative Direction (Anti Clockwise)
-        if((current_encoder > encoder_highest * 0.7 and current_encoder <= encoder_highest) and (previous_encoder >= encoder_lowest and previous_encoder < encoder_highest * 0.3)):
+        elif((current_encoder > encoder_highest * 0.7 and current_encoder <= encoder_highest) and (previous_encoder >= encoder_lowest and previous_encoder < encoder_highest * 0.3)):
             previous_encoder = previous_encoder + encoder_highest
                 
         if(current_encoder <= previous_encoder - encoder_tick_resolution):
-            tick_count = tick_count + ((previous_encoder - current_encoder)/encoder_tick_resolution)
+            # change + to - after this line if you want
+            tick_count = tick_count + (abs(current_encoder - previous_encoder)/encoder_tick_resolution)
             # We want Encoder Tick count 0 at Robot Startup. So it will check startup and will reset tick counter
             if(first_cycle_flag == True):
                 tick_count = 0
@@ -46,8 +48,8 @@ while True:
             #print(' - - ')
             previous_encoder = current_encoder 
         
-        if((current_encoder >= previous_encoder + encoder_tick_resolution)):
-            tick_count = tick_count - ((current_encoder - previous_encoder)/encoder_tick_resolution)
+        elif((current_encoder >= previous_encoder + encoder_tick_resolution)):
+            tick_count = tick_count - (abs(current_encoder - previous_encoder)/encoder_tick_resolution)
             # We want Encoder Tick count 0 at Robot Startup. So it will check startup and will reset tick counter
             if(first_cycle_flag == True):
                 tick_count = 0
