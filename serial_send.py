@@ -10,7 +10,7 @@ while True:
     
     #send_data = str(i%2) + 'F100F112' 
 
-    send_data = 'KF110F110G'
+    send_data = 'KF110S110S110S110G'
     #send_data = send_data + '\n' 
     ser.write(bytes(send_data, 'utf-8'))
     #ser.write(send_data.encode())
@@ -18,5 +18,5 @@ while True:
     packet = ser.readline()
     print(packet)
     
-    time.sleep(0.01)
+    time.sleep(0.001)
     

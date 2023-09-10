@@ -7,6 +7,7 @@ tick_count = 0
 tick_count_resolution = 1
 highest_tick = 100
 lowest_tick = -100
+first_cycle_flag = True
 
 while(1):
     encoder_analog_data = input(" --- Plz Input Encoder Analog Data: ")
@@ -20,10 +21,18 @@ while(1):
         previous_encoder = previous_encoder - encoder_highest
       
     if((current_encoder >= previous_encoder + encoder_tick_resolution)):
-        tick_count = tick_count + tick_count_resolution
+        tick_count = tick_count + (abs(current_encoder - previous_encoder)/encoder_tick_resolution)
+        # We want Encoder Tick count 0 at Robot Startup. So it will check startup and will reset tick counter
+        if(first_cycle_flag == True):
+            tick_count = 0
+            first_cycle_flag = False
         previous_encoder = current_encoder 
     elif(current_encoder <= previous_encoder- encoder_tick_resolution):
-        tick_count = tick_count - tick_count_resolution
+        tick_count = tick_count - (abs(current_encoder - previous_encoder)/encoder_tick_resolution)
+        # We want Encoder Tick count 0 at Robot Startup. So it will check startup and will reset tick counter
+        if(first_cycle_flag == True):
+            tick_count = 0
+            first_cycle_flag = False
         previous_encoder = current_encoder 
         
 
