@@ -6,6 +6,7 @@ i = 0
 right_encoder_rawValue_current = 0
 counter = 0
 count_flag = False
+increase = 0
 
 
 while True:
@@ -13,7 +14,7 @@ while True:
     
     #send_data = str(i%2) + 'F100F112' 
 
-    send_data = 'KS110S255S110S110G'
+    send_data = 'KS110F70S110S110G'
     #send_data = send_data + '\n' 
     ser.write(bytes(send_data, 'utf-8'))
     #ser.write(send_data.encode())
@@ -30,10 +31,13 @@ while True:
     
     print(right_encoder_rawValue_current)
 
-    if(right_encoder_rawValue_current > 32000):
+    if(right_encoder_rawValue_current > 1000 + increase):
         
-        count_flag = True
-        zero_flag = False
+        increase = increase + 1000
+        send_data = 'KS110S255S110S110G'
+        #send_data = send_data + '\n' 
+        ser.write(bytes(send_data, 'utf-8'))
+        time.sleep(2)
 
     if(count_flag == True):
         counter = counter + 1
