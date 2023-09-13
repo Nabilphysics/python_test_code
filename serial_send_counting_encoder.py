@@ -15,16 +15,16 @@ previous_encoder_value = 0.0
 
 time.sleep(1)
 start_time_seconds = time.time()
-for i in range(100):
-    send_data = 'KS110F100S110S110G'
+for i in range(30):
+    send_data = 'KF110F110S110S110G'
     ser.write(bytes(send_data, 'utf-8'))
     time.sleep(0.1)
-    print('Initial Loop')
-
+    print('Initial Loop: ', i)
+print('Starting ..... ')
 while True:
     start_loop = time.time()
 
-    send_data = 'KS110F100S110S110G'
+    #send_data = 'KF110F110G'
     ser.write(bytes(send_data, 'utf-8'))
     
     packet = ser.readline()
