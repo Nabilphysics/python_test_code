@@ -1,13 +1,12 @@
 
 
-
 class EncoderWrap():
     def __init__(self, encoder_min, encoder_max):
         self.encoder_min = encoder_min
         self.encoder_max = encoder_max
-        self.mult = 0 
-        self.prev_encoder = 0
-        self.curr_encoder = 0 
+        self.mult = 0.0 
+        self.prev_encoder = 0.0
+        self.curr_encoder = 0.0 
         self.encoder_low_wrap = ((self.encoder_max - self.encoder_min) * 0.3 + self.encoder_min) 
         self.encoder_high_wrap = ((self.encoder_max - self.encoder_min) * 0.7 + self.encoder_min )
 
@@ -29,7 +28,7 @@ class EncoderWrap():
 
 
 def main():
-    en = EncoderWrap(encoder_min=-5, encoder_max=5)
+    en = EncoderWrap(encoder_min=0, encoder_max=5)
     while True:
         inp = int(input('Input Encoder: '))
         print(en.getEncTick(inp))
